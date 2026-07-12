@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latein Lektion 33 – Vokabeltrainer</title>
+<style>
+  :root{
+    --bg:#0f1226; --bg2:#171a3a; --card:#1e2246; --card2:#262b57;
+    --accent:#ffcb5c; --accent2:#7c5cff; --good:#3ddc97; --bad:#ff6b81;
+    --text:#eef0ff; --muted:#9aa0c7; --line:#2f356a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 20% -10%,#2a2160 0%,transparent 60%),
+               radial-gradient(1000px 500px at 100% 0%,#3a1f5e 0%,transparent 55%),
+               var(--bg);
+    color:var(--text); min-height:100vh; padding:20px; display:flex; justify-content:center;
+  }
+  .wrap{width:100%; max-width:760px;}
+  header{text-align:center; margin-bottom:18px;}
+  h1{font-size:1.7rem; letter-spacing:.5px;}
+  h1 .lat{color:var(--accent);}
+  .sub{color:var(--muted); font-size:.95rem; margin-top:4px;}
+
+  .stats{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:16px 0;}
+  .pill{background:var(--card); border:1px solid var(--line); padding:8px 14px; border-radius:999px;
+        font-size:.85rem; display:flex; gap:6px; align-items:center;}
+  .pill b{color:var(--accent);}
+  .pill.streak b{color:var(--good);}
+
+  .modes{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:18px;}
+  .mode{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--line);
+        border-radius:16px; padding:18px; cursor:pointer; transition:.15s; text-align:left;}
+  .mode:hover{transform:translateY(-3px); border-color:var(--accent2); box-shadow:0 8px 24px rgba(124,92,255,.25);}
+  .mode .ico{font-size:1.8rem;}
+  .mode h3{margin:8px 0 4px; font-size:1.05rem;}
+  .mode p{color:var(--muted); font-size:.82rem; line-height:1.3;}
+
+  .panel{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--line);
+         border-radius:20px; padding:26px; min-height:320px; display:flex; flex-direction:column;}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:10px; flex-wrap:wrap;}
+  .btn{background:var(--accent2); color:#fff; border:none; padding:10px 16px; border-radius:12px;
+       font-size:.9rem; cursor:pointer; font-weight:600; transition:.15s;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--muted);}
+  .btn.small{padding:7px 12px; font-size:.82rem;}
+  .dir{font-size:.82rem; color:var(--muted);}
+  .dir b{color:var(--accent);}
+
+  .progress{height:8px; background:var(--bg2); border-radius:999px; overflow:hidden; margin-bottom:18px;}
+  .progress > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent2),var(--accent)); transition:.3s;}
+
+  /* Flashcard */
+  .card3d{perspective:1200px; flex:1; display:flex; align-items:center; justify-content:center; margin:10px 0;}
+  .flip{position:relative; width:100%; max-width:460px; min-height:200px; transform-style:preserve-3d;
+        transition:transform .5s; cursor:pointer;}
+  .flip.flipped{transform:rotateY(180deg);}
+  .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:18px; padding:26px;
+        display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+        border:1px solid var(--line);}
+  .face.front{background:var(--bg2);}
+  .face.back{background:linear-gradient(160deg,#2a2f63,#3a2f70); transform:rotateY(180deg);}
+  .face .word{font-size:1.7rem; font-weight:700; color:var(--accent);}
+  .face .forms{font-size:.95rem; color:var(--muted); margin-top:8px;}
+  .face .de{font-size:1.35rem; font-weight:600;}
+  .hint{color:var(--muted); font-size:.8rem; margin-top:14px;}
+
+  /* Quiz */
+  .q-word{font-size:1.7rem; font-weight:700; text-align:center; margin:6px 0 4px; color:var(--accent);}
+  .q-forms{text-align:center; color:var(--muted); font-size:.9rem; margin-bottom:20px;}
+  .options{display:grid; gap:12px;}
+  .opt{background:var(--bg2); border:1px solid var(--line); padding:15px 18px; border-radius:14px;
+       cursor:pointer; font-size:1rem; text-align:left; transition:.12s;}
+  .opt:hover{border-color:var(--accent2);}
+  .opt.correct{background:rgba(61,220,151,.18); border-color:var(--good); color:#d7ffec;}
+  .opt.wrong{background:rgba(255,107,129,.16); border-color:var(--bad);}
+  .opt:disabled{cursor:default;}
+
+  /* Typing */
+  .type-input{width:100%; padding:15px; border-radius:14px; border:1px solid var(--line);
+              background:var(--bg2); color:var(--text); font-size:1.1rem; margin-top:6px;}
+  .type-input:focus{outline:none; border-color:var(--accent2);}
+  .feedback{margin-top:16px; font-size:1rem; min-height:26px; text-align:center;}
+  .feedback.good{color:var(--good);} .feedback.bad{color:var(--bad);}
+  .feedback .sol{color:var(--accent); font-weight:700;}
+
+  /* Match */
+  .match-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; flex:1;}
+  .match-col{display:flex; flex-direction:column; gap:10px;}
+  .mtile{background:var(--bg2); border:1px solid var(--line); padding:13px; border-radius:12px;
+         cursor:pointer; font-size:.95rem; transition:.12s; text-align:center;}
+  .mtile:hover{border-color:var(--accent2);}
+  .mtile.sel{border-color:var(--accent); background:rgba(255,203,92,.12);}
+  .mtile.done{opacity:.28; pointer-events:none; border-color:var(--good);}
+  .mtile.miss{border-color:var(--bad); animation:shake .3s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  .center{text-align:center; margin-top:auto;}
+  .big-emoji{font-size:3rem;}
+  .done-msg{font-size:1.3rem; font-weight:700; margin:10px 0;}
+  .hidden{display:none !important;}
+  footer{text-align:center; color:var(--muted); font-size:.75rem; margin-top:18px;}
+  .backlink{color:var(--muted); cursor:pointer; font-size:.85rem;}
+  .backlink:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🏛️ <span class="lat">Latein</span> · Lektion 33</h1>
+    <div class="sub">31 Vokabeln – spielerisch lernen</div>
+  </header>
+
+  <div class="stats">
+    <div class="pill">✅ Richtig: <b id="stCorrect">0</b></div>
+    <div class="pill">❌ Falsch: <b id="stWrong">0</b></div>
+    <div class="pill streak">🔥 Serie: <b id="stStreak">0</b></div>
+    <div class="pill">🏆 Rekord: <b id="stBest">0</b></div>
+  </div>
+
+  <!-- MENU -->
+  <div id="menu">
+    <div class="modes">
+      <div class="mode" onclick="startMode('flash')">
+        <div class="ico">🃏</div><h3>Karteikarten</h3>
+        <p>Wort ansehen, umdrehen, Bedeutung prüfen. Ganz ohne Druck.</p>
+      </div>
+      <div class="mode" onclick="startMode('quiz')">
+        <div class="ico">🎯</div><h3>Quiz</h3>
+        <p>Wähle die richtige Übersetzung aus vier Möglichkeiten.</p>
+      </div>
+      <div class="mode" onclick="startMode('type')">
+        <div class="ico">⌨️</div><h3>Tippen</h3>
+        <p>Übersetzung selbst eingeben. Für Profis.</p>
+      </div>
+      <div class="mode" onclick="startMode('match')">
+        <div class="ico">🧩</div><h3>Paare finden</h3>
+        <p>Latein und Deutsch verbinden – gegen die Uhr.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:6px;">
+      <button class="btn ghost small" onclick="toggleDir()">Richtung: <span id="dirLabel"></span></button>
+      <button class="btn ghost small" onclick="resetStats()">Statistik zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- GAME PANEL -->
+  <div id="game" class="panel hidden">
+    <div class="toolbar">
+      <span class="backlink" onclick="goMenu()">← Menü</span>
+      <span class="dir" id="gameDir"></span>
+      <button class="btn ghost small" onclick="startMode(currentMode)">🔀 Neu mischen</button>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+    <div id="stage"></div>
+  </div>
+
+  <footer>Erstellt aus deinem Vokabelheft · Lektion 33 · Viel Erfolg! 💪</footer>
+</div>
+
+<script>
+/* ---------- VOKABELN Lektion 33 ---------- */
+const VOCAB = [
+  {lat:"sānctus, sāncta, sānctum", forms:"Adjektiv", de:["ehrwürdig","heilig"]},
+  {lat:"imprīmīs", forms:"Adverb", de:["besonders","insbesondere"]},
+  {lat:"ōrnāre", forms:"", de:["schmücken","ausstatten"]},
+  {lat:"subīre, subeō, subiī, subitum", forms:"", de:["auf sich nehmen","herangehen"]},
+  {lat:"umquam", forms:"Adverb", de:["jemals"]},
+  {lat:"memoria, memoriae f", forms:"", de:["die Erinnerung","das Gedächtnis","die Zeit"]},
+  {lat:"intellegere, intellegō, intellēxī, intellēctum", forms:"", de:["verstehen","erkennen","einsehen"]},
+  {lat:"lūdus, lūdī m", forms:"", de:["das Spiel","die Schule"]},
+  {lat:"discere, discō, didicī", forms:"", de:["lernen","in Erfahrung bringen"]},
+  {lat:"beneficium, beneficiī n", forms:"", de:["die Wohltat"]},
+  {lat:"tribuere, tribuō, tribuī, tribūtum", forms:"", de:["zuteilen","schenken","erweisen"]},
+  {lat:"efficere, efficiō, effēcī, effectum", forms:"", de:["bewirken","erreichen"]},
+  {lat:"optimus, optima, optimum", forms:"Adjektiv", de:["der beste","sehr gut"]},
+  {lat:"praetereā", forms:"Adverb", de:["außerdem"]},
+  {lat:"undique", forms:"Adverb", de:["von überall her"]},
+  {lat:"plūrimī, plūrimae, plūrima", forms:"", de:["die meisten","sehr viele","am meisten"]},
+  {lat:"iuventūs, iuventūtis f", forms:"", de:["die Jugend"]},
+  {lat:"ūnusquisque", forms:"", de:["jeder Einzelne"]},
+  {lat:"celer, celeris, celere", forms:"Adjektiv", de:["schnell"]},
+  {lat:"quam", forms:"", de:["(nach Komparativ) als","(vor Superlativ) möglichst"]},
+  {lat:"melior, melior, melius", forms:"Komparativ", de:["besser"]},
+  {lat:"māior, māior, māius", forms:"Komparativ", de:["größer"]},
+  {lat:"ūsus, ūsūs m", forms:"", de:["der Gebrauch","der Nutzen","die Erfahrung"]},
+  {lat:"praeclārus, praeclāra, praeclārum", forms:"Adjektiv", de:["herrlich","ausgezeichnet","sehr bekannt"]},
+  {lat:"carmen, carminis n", forms:"", de:["das Gedicht","das Lied"]},
+  {lat:"celebrāre", forms:"", de:["rühmen","verherrlichen","feiern"]},
+  {lat:"māximus, māxima, māximum", forms:"Superlativ", de:["der größte","sehr groß"]},
+  {lat:"pecūnia, pecūniae f", forms:"", de:["das Geld","das Vermögen"]},
+  {lat:"dōnāre", forms:"", de:["(be)schenken"]},
+  {lat:"lēx, lēgis f", forms:"", de:["das Gesetz","die Bedingung"]},
+  {lat:"dum", forms:"Subjunktion", de:["solange","(solange) bis"]}
+];
+
+/* ---------- STATE ---------- */
+let stats={correct:0,wrong:0,streak:0,best:0};
+let dir="latDe"; // latDe = Latein→Deutsch, deLat = Deutsch→Latein
+let currentMode=null;
+let order=[], idx=0;
+
+const $=id=>document.getElementById(id);
+const stage=$("stage");
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return s.toLowerCase().replace(/[āēīōūăĕĭŏŭ]/g,c=>({'ā':'a','ē':'e','ī':'i','ō':'o','ū':'u','ă':'a','ĕ':'e','ĭ':'i','ŏ':'o','ŭ':'u'}[c])).replace(/[^a-zäöüß ]/g,'').replace(/^(der|die|das|ein|eine|sich|in etw)\b/,'').replace(/[()]/g,'').trim();}
+
+/* prompt/answer depending on direction */
+function prompt(v){return dir==="latDe"? v.lat : v.de.join(", ");}
+function subline(v){return dir==="latDe"? v.forms : "gesucht: Latein";}
+function answers(v){return dir==="latDe"? v.de : [v.lat.split(",")[0].trim()];}
+function answerText(v){return dir==="latDe"? v.de.join(" / ") : v.lat;}
+
+function updateStats(){
+  $("stCorrect").textContent=stats.correct;
+  $("stWrong").textContent=stats.wrong;
+  $("stStreak").textContent=stats.streak;
+  if(stats.streak>stats.best) stats.best=stats.streak;
+  $("stBest").textContent=stats.best;
+}
+function score(ok){
+  if(ok){stats.correct++;stats.streak++;}
+  else{stats.wrong++;stats.streak=0;}
+  updateStats();
+}
+function resetStats(){stats={correct:0,wrong:0,streak:0,best:0};updateStats();}
+
+function toggleDir(){dir=dir==="latDe"?"deLat":"latDe";renderDirLabel();}
+function renderDirLabel(){
+  const t=dir==="latDe"?"Latein → Deutsch":"Deutsch → Latein";
+  $("dirLabel").textContent=t;
+}
+
+function goMenu(){currentMode=null;$("game").classList.add("hidden");$("menu").classList.remove("hidden");}
+function setBar(){$("bar").style.width=(idx/order.length*100)+"%";}
+
+function startMode(mode){
+  currentMode=mode;
+  order=shuffle([...Array(VOCAB.length).keys()]);
+  idx=0;
+  $("menu").classList.add("hidden");
+  $("game").classList.remove("hidden");
+  $("gameDir").innerHTML="Modus: <b>"+({flash:"Karteikarten",quiz:"Quiz",type:"Tippen",match:"Paare"})[mode]+"</b> · "+(dir==="latDe"?"LAT→DE":"DE→LAT");
+  if(mode==="match"){renderMatch();} else {render();}
+}
+
+/* ---------- FLASHCARDS ---------- */
+function render(){
+  if(idx>=order.length){renderDone();return;}
+  setBar();
+  const v=VOCAB[order[idx]];
+  if(currentMode==="flash"){
+    stage.innerHTML=`
+      <div class="card3d"><div class="flip" id="flip" onclick="this.classList.toggle('flipped')">
+        <div class="face front"><div class="word">${dir==="latDe"?v.lat:v.de.join(", ")}</div>
+          <div class="forms">${dir==="latDe"?(v.forms||"&nbsp;"):"Was heißt das auf Latein?"}</div>
+          <div class="hint">👆 Zum Umdrehen tippen</div></div>
+        <div class="face back"><div class="de">${dir==="latDe"?v.de.join("<br>"):v.lat}</div></div>
+      </div></div>
+      <div class="center" style="margin-top:14px;">
+        <button class="btn ghost" onclick="prev()">‹ Zurück</button>
+        <button class="btn" onclick="next()">Nächste ›</button>
+      </div>
+      <div class="hint" style="text-align:center;margin-top:8px;">Karte ${idx+1} / ${order.length}</div>`;
+  } else if(currentMode==="quiz"){
+    renderQuiz(v);
+  } else if(currentMode==="type"){
+    renderType(v);
+  }
+}
+function next(){idx++;render();}
+function prev(){if(idx>0){idx--;render();}}
+
+/* ---------- QUIZ ---------- */
+function renderQuiz(v){
+  const correct=answerText(v);
+  const pool=shuffle(VOCAB.filter(x=>x!==v)).slice(0,3).map(x=>answerText(x));
+  const opts=shuffle([correct,...pool]);
+  stage.innerHTML=`
+    <div class="q-word">${prompt(v)}</div>
+    <div class="q-forms">${subline(v)||"&nbsp;"}</div>
+    <div class="options" id="opts"></div>`;
+  const box=$("opts");
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=o;
+    b.onclick=()=>{
+      const ok=o===correct;
+      [...box.children].forEach(c=>{
+        c.disabled=true;
+        if(c.textContent===correct)c.classList.add("correct");
+        else if(c===b)c.classList.add("wrong");
+      });
+      score(ok);
+      setTimeout(()=>{idx++;render();}, ok?650:1400);
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- TYPING ---------- */
+function renderType(v){
+  stage.innerHTML=`
+    <div class="q-word">${prompt(v)}</div>
+    <div class="q-forms">${subline(v)||"&nbsp;"}</div>
+    <input class="type-input" id="tin" placeholder="Übersetzung eingeben…" autocomplete="off" autofocus>
+    <div class="feedback" id="fb"></div>
+    <div class="center" style="margin-top:14px;">
+      <button class="btn" id="chk" onclick="checkType()">Prüfen</button>
+      <button class="btn ghost" onclick="revealType()">Ich weiß es nicht</button>
+    </div>`;
+  const inp=$("tin");
+  inp.focus();
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkType();});
+  stage._v=v; stage._answered=false;
+}
+function checkType(){
+  if(stage._answered){idx++;render();return;}
+  const v=stage._v, val=$("tin").value.trim();
+  if(!val)return;
+  const ok=answers(v).some(a=>norm(a)===norm(val));
+  stage._answered=true;
+  score(ok);
+  const fb=$("fb");
+  if(ok){fb.className="feedback good";fb.textContent="✅ Richtig! "+(dir==="latDe"?"":v.lat);}
+  else{fb.className="feedback bad";fb.innerHTML="❌ Lösung: <span class='sol'>"+answerText(v)+"</span>";}
+  $("tin").disabled=true;
+  $("chk").textContent="Weiter ›";
+}
+function revealType(){
+  if(stage._answered){idx++;render();return;}
+  const v=stage._v; stage._answered=true; score(false);
+  const fb=$("fb"); fb.className="feedback bad";
+  fb.innerHTML="👉 Lösung: <span class='sol'>"+answerText(v)+"</span>";
+  $("tin").disabled=true; $("chk").textContent="Weiter ›";
+}
+
+/* ---------- MATCH ---------- */
+let matchSel=null, matchDone=0, matchTimer=null, matchTime=0;
+function renderMatch(){
+  const batch=shuffle([...Array(VOCAB.length).keys()]).slice(0,6);
+  const lefts=shuffle(batch), rights=shuffle(batch);
+  matchDone=0; matchSel=null; matchTime=0;
+  stage.innerHTML=`
+    <div class="q-forms">⏱️ <span id="clock">0.0</span>s · Verbinde die 6 Paare</div>
+    <div class="match-grid">
+      <div class="match-col" id="colL"></div>
+      <div class="match-col" id="colR"></div>
+    </div>`;
+  const colL=$("colL"), colR=$("colR");
+  lefts.forEach(i=>{
+    const d=document.createElement("div"); d.className="mtile"; d.dataset.i=i;
+    d.textContent=VOCAB[i].lat.split(",")[0]; d.onclick=()=>pick(d,"L"); colL.appendChild(d);
+  });
+  rights.forEach(i=>{
+    const d=document.createElement("div"); d.className="mtile"; d.dataset.i=i;
+    d.textContent=VOCAB[i].de.join(", "); d.onclick=()=>pick(d,"R"); colR.appendChild(d);
+  });
+  setBar();$("bar").style.width="0%";
+  clearInterval(matchTimer);
+  matchTimer=setInterval(()=>{matchTime+=0.1;$("clock").textContent=matchTime.toFixed(1);},100);
+}
+function pick(el,side){
+  if(el.classList.contains("done"))return;
+  if(!matchSel){matchSel={el,side,i:el.dataset.i};el.classList.add("sel");return;}
+  if(matchSel.el===el){el.classList.remove("sel");matchSel=null;return;}
+  if(matchSel.side===side){matchSel.el.classList.remove("sel");matchSel={el,side,i:el.dataset.i};el.classList.add("sel");return;}
+  // compare
+  if(matchSel.i===el.dataset.i){
+    el.classList.add("done");matchSel.el.classList.remove("sel");matchSel.el.classList.add("done");
+    matchSel=null;matchDone++;score(true);
+    $("bar").style.width=(matchDone/6*100)+"%";
+    if(matchDone===6){clearInterval(matchTimer);setTimeout(matchWin,400);}
+  }else{
+    const a=el,b=matchSel.el;a.classList.add("miss");b.classList.add("miss");
+    score(false);matchSel=null;
+    setTimeout(()=>{a.classList.remove("miss");b.classList.remove("sel","miss");},350);
+  }
+}
+function matchWin(){
+  stage.innerHTML=`<div class="center">
+    <div class="big-emoji">🎉</div>
+    <div class="done-msg">Alle Paare gefunden!</div>
+    <p style="color:var(--muted)">Zeit: <b style="color:var(--accent)">${matchTime.toFixed(1)}s</b></p>
+    <div style="margin-top:18px;">
+      <button class="btn" onclick="renderMatch()">Nochmal ⏱️</button>
+      <button class="btn ghost" onclick="goMenu()">Menü</button>
+    </div></div>`;
+}
+
+/* ---------- DONE ---------- */
+function renderDone(){
+  $("bar").style.width="100%";
+  const total=stats.correct+stats.wrong;
+  stage.innerHTML=`<div class="center">
+    <div class="big-emoji">🏆</div>
+    <div class="done-msg">Durchgang geschafft!</div>
+    <p style="color:var(--muted)">Alle ${order.length} Vokabeln durch.<br>Beste Serie: <b style="color:var(--good)">${stats.best}</b></p>
+    <div style="margin-top:18px;">
+      <button class="btn" onclick="startMode(currentMode)">Nochmal 🔁</button>
+      <button class="btn ghost" onclick="goMenu()">Menü</button>
+    </div></div>`;
+}
+
+renderDirLabel();
+updateStats();
+</script>
+</body>
+</html>
