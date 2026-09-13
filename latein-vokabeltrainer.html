@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latein Vokabeltrainer – Lektionen 31–33</title>
+<style>
+  :root{
+    --bg:#0f1226; --bg2:#171a3a; --card:#1e2246; --card2:#262b57;
+    --accent:#ffcb5c; --accent2:#7c5cff; --good:#3ddc97; --bad:#ff6b81;
+    --text:#eef0ff; --muted:#9aa0c7; --line:#2f356a;
+    --m:#5cc8ff; --f:#ff8fc4; --n:#9dff9d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 600px at 20% -10%,#2a2160 0%,transparent 60%),
+               radial-gradient(1000px 500px at 100% 0%,#3a1f5e 0%,transparent 55%),
+               var(--bg);
+    color:var(--text); min-height:100vh; padding:20px; display:flex; justify-content:center;
+  }
+  .wrap{width:100%; max-width:780px;}
+  header{text-align:center; margin-bottom:14px;}
+  h1{font-size:1.6rem; letter-spacing:.5px;}
+  h1 .lat{color:var(--accent);}
+  .sub{color:var(--muted); font-size:.9rem; margin-top:4px;}
+
+  .stats{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:14px 0;}
+  .pill{background:var(--card); border:1px solid var(--line); padding:7px 13px; border-radius:999px;
+        font-size:.82rem; display:flex; gap:6px; align-items:center;}
+  .pill b{color:var(--accent);}
+  .pill.streak b{color:var(--good);}
+
+  .lek-select{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:8px 0 20px;}
+  .chip{background:var(--card); border:1px solid var(--line); color:var(--muted);
+        padding:8px 16px; border-radius:999px; cursor:pointer; font-size:.88rem; font-weight:600; transition:.15s;}
+  .chip.on{background:var(--accent2); color:#fff; border-color:var(--accent2);}
+  .chip:hover{border-color:var(--accent2);}
+
+  .section-label{color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:1px;
+                 margin:6px 4px 10px;}
+  .modes{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px;}
+  .mode{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--line);
+        border-radius:16px; padding:16px; cursor:pointer; transition:.15s; text-align:left;}
+  .mode:hover{transform:translateY(-3px); border-color:var(--accent2); box-shadow:0 8px 24px rgba(124,92,255,.25);}
+  .mode.gram:hover{border-color:var(--accent); box-shadow:0 8px 24px rgba(255,203,92,.22);}
+  .mode .ico{font-size:1.6rem;}
+  .mode h3{margin:7px 0 4px; font-size:1rem;}
+  .mode p{color:var(--muted); font-size:.8rem; line-height:1.3;}
+  .mode .cnt{color:var(--accent); font-size:.75rem; margin-top:6px; font-weight:600;}
+
+  .panel{background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--line);
+         border-radius:20px; padding:24px; min-height:340px; display:flex; flex-direction:column;}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; flex-wrap:wrap;}
+  .btn{background:var(--accent2); color:#fff; border:none; padding:10px 16px; border-radius:12px;
+       font-size:.9rem; cursor:pointer; font-weight:600; transition:.15s;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--muted);}
+  .btn.small{padding:7px 12px; font-size:.82rem;}
+  .dir{font-size:.8rem; color:var(--muted);} .dir b{color:var(--accent);}
+
+  .progress{height:8px; background:var(--bg2); border-radius:999px; overflow:hidden; margin-bottom:18px;}
+  .progress > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent2),var(--accent)); transition:.3s;}
+
+  .card3d{perspective:1200px; flex:1; display:flex; align-items:center; justify-content:center; margin:10px 0;}
+  .flip{position:relative; width:100%; max-width:480px; min-height:210px; transform-style:preserve-3d;
+        transition:transform .5s; cursor:pointer;}
+  .flip.flipped{transform:rotateY(180deg);}
+  .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:18px; padding:24px;
+        display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border:1px solid var(--line);}
+  .face.front{background:var(--bg2);}
+  .face.back{background:linear-gradient(160deg,#2a2f63,#3a2f70); transform:rotateY(180deg);}
+  .face .word{font-size:1.4rem; font-weight:700; color:var(--accent); line-height:1.3;}
+  .face .forms{font-size:.85rem; color:var(--muted); margin-top:10px; line-height:1.4;}
+  .face .de{font-size:1.3rem; font-weight:600;}
+  .hint{color:var(--muted); font-size:.78rem; margin-top:14px;}
+  .badge{display:inline-block; font-size:.7rem; padding:2px 8px; border-radius:6px; margin-left:6px; vertical-align:middle;}
+  .badge.m{background:rgba(92,200,255,.18); color:var(--m);}
+  .badge.f{background:rgba(255,143,196,.18); color:var(--f);}
+  .badge.n{background:rgba(157,255,157,.18); color:var(--n);}
+
+  .q-word{font-size:1.5rem; font-weight:700; text-align:center; margin:6px 0 4px; color:var(--accent); line-height:1.3;}
+  .q-forms{text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:18px; line-height:1.4;}
+  .options{display:grid; gap:11px;}
+  .opt{background:var(--bg2); border:1px solid var(--line); padding:14px 17px; border-radius:14px;
+       cursor:pointer; font-size:1rem; text-align:left; transition:.12s;}
+  .opt:hover{border-color:var(--accent2);}
+  .opt.correct{background:rgba(61,220,151,.18); border-color:var(--good); color:#d7ffec;}
+  .opt.wrong{background:rgba(255,107,129,.16); border-color:var(--bad);}
+  .opt:disabled{cursor:default;}
+  .opt.big{text-align:center; font-size:1.3rem; font-weight:700;}
+
+  .type-input{width:100%; padding:14px; border-radius:14px; border:1px solid var(--line);
+              background:var(--bg2); color:var(--text); font-size:1.05rem; margin-top:6px;}
+  .type-input:focus{outline:none; border-color:var(--accent2);}
+  .stammform-row{display:flex; flex-direction:column; gap:4px; margin-bottom:12px;}
+  .stammform-row label{font-size:.78rem; color:var(--muted); margin-left:2px;}
+  .feedback{margin-top:14px; font-size:.98rem; min-height:24px; text-align:center; line-height:1.5;}
+  .feedback.good{color:var(--good);} .feedback.bad{color:var(--bad);}
+  .feedback .sol{color:var(--accent); font-weight:700;}
+
+  .match-grid{display:grid; grid-template-columns:1fr 1fr; gap:11px; flex:1;}
+  .match-col{display:flex; flex-direction:column; gap:9px;}
+  .mtile{background:var(--bg2); border:1px solid var(--line); padding:12px; border-radius:12px;
+         cursor:pointer; font-size:.9rem; transition:.12s; text-align:center;}
+  .mtile:hover{border-color:var(--accent2);}
+  .mtile.sel{border-color:var(--accent); background:rgba(255,203,92,.12);}
+  .mtile.done{opacity:.28; pointer-events:none; border-color:var(--good);}
+  .mtile.miss{border-color:var(--bad); animation:shake .3s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  .center{text-align:center; margin-top:auto;}
+  .big-emoji{font-size:3rem;}
+  .done-msg{font-size:1.25rem; font-weight:700; margin:10px 0;}
+  .hidden{display:none !important;}
+  footer{text-align:center; color:var(--muted); font-size:.72rem; margin-top:16px;}
+  .backlink{color:var(--muted); cursor:pointer; font-size:.85rem;}
+  .backlink:hover{color:var(--accent);}
+  .warn{color:var(--bad); text-align:center; padding:20px; font-size:.95rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🏛️ <span class="lat">Latein</span> · Vokabeltrainer</h1>
+    <div class="sub">Lektionen 31 · 32 · 33 – mit Geschlecht, Genitiv & Stammformen</div>
+  </header>
+
+  <div class="stats">
+    <div class="pill">✅ <b id="stCorrect">0</b></div>
+    <div class="pill">❌ <b id="stWrong">0</b></div>
+    <div class="pill streak">🔥 Serie <b id="stStreak">0</b></div>
+    <div class="pill">🏆 Rekord <b id="stBest">0</b></div>
+  </div>
+
+  <!-- MENU -->
+  <div id="menu">
+    <div class="section-label" style="text-align:center;">Lektionen auswählen</div>
+    <div class="lek-select" id="lekSelect">
+      <span class="chip on" data-lek="31" onclick="toggleLek(31,this)">Lektion 31</span>
+      <span class="chip on" data-lek="32" onclick="toggleLek(32,this)">Lektion 32</span>
+      <span class="chip on" data-lek="33" onclick="toggleLek(33,this)">Lektion 33</span>
+    </div>
+
+    <div class="section-label">📖 Übersetzen</div>
+    <div class="modes">
+      <div class="mode" onclick="startMode('flash')">
+        <div class="ico">🃏</div><h3>Karteikarten</h3>
+        <p>Wort umdrehen, Bedeutung prüfen. Ganz ohne Druck.</p>
+      </div>
+      <div class="mode" onclick="startMode('quiz')">
+        <div class="ico">🎯</div><h3>Quiz</h3>
+        <p>Richtige Übersetzung aus vier wählen.</p>
+      </div>
+      <div class="mode" onclick="startMode('type')">
+        <div class="ico">⌨️</div><h3>Tippen</h3>
+        <p>Übersetzung selbst eingeben.</p>
+      </div>
+      <div class="mode" onclick="startMode('match')">
+        <div class="ico">🧩</div><h3>Paare finden</h3>
+        <p>Latein & Deutsch verbinden – auf Zeit.</p>
+      </div>
+    </div>
+
+    <div class="section-label">🔤 Grammatik</div>
+    <div class="modes">
+      <div class="mode gram" onclick="startMode('gender')">
+        <div class="ico">⚥</div><h3>Geschlecht</h3>
+        <p>Ist das Nomen m, f oder n?</p>
+        <div class="cnt" id="cntGender"></div>
+      </div>
+      <div class="mode gram" onclick="startMode('genitive')">
+        <div class="ico">✍️</div><h3>Genitiv</h3>
+        <p>Genitivform des Nomens eingeben.</p>
+        <div class="cnt" id="cntGenitive"></div>
+      </div>
+      <div class="mode gram" onclick="startMode('stamm')">
+        <div class="ico">🔀</div><h3>Stammformen</h3>
+        <p>Zeitformen der Verben: Präsens, Perfekt, PPP.</p>
+        <div class="cnt" id="cntStamm"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:2px;">
+      <button class="btn ghost small" onclick="toggleDir()">Richtung: <span id="dirLabel"></span></button>
+      <button class="btn ghost small" onclick="resetStats()">Statistik zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- GAME PANEL -->
+  <div id="game" class="panel hidden">
+    <div class="toolbar">
+      <span class="backlink" onclick="goMenu()">← Menü</span>
+      <span class="dir" id="gameDir"></span>
+      <button class="btn ghost small" onclick="startMode(currentMode)">🔀 Neu mischen</button>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+    <div id="stage"></div>
+  </div>
+
+  <footer>Erstellt aus deinem Vokabelheft · Lektionen 31–33 · Viel Erfolg! 💪</footer>
+</div>
+
+<script>
+/* ============ VOKABELN Lektion 31–33 ============
+   pos: noun | verb | adj | word
+   noun: nom, gen (Genitivform), gender m|f|n
+   verb: inf, forms [Präsens1Sg, Perfekt1Sg, PPP]  (nur wo im Heft angegeben)
+*/
+const VOCAB = [
+/* ---------- LEKTION 31 ---------- */
+{lek:31,pos:"adj",lemma:"rēgius, rēgia, rēgium",de:["königlich"]},
+{lek:31,pos:"noun",lemma:"fenestra, fenestrae f",nom:"fenestra",gen:"fenestrae",gender:"f",de:["das Fenster"]},
+{lek:31,pos:"verb",lemma:"dēspicere, dēspiciō, dēspexī, dēspectum",inf:"dēspicere",forms:["dēspiciō","dēspexī","dēspectum"],de:["herabblicken","verachten"],note:"(auf etw.) herabblicken"},
+{lek:31,pos:"noun",lemma:"aspectus, aspectūs m",nom:"aspectus",gen:"aspectūs",gender:"m",de:["der Anblick"]},
+{lek:31,pos:"adj",lemma:"vetus, veteris",de:["alt","ehemalig","erfahren"],note:"Gen. veteris, Abl. Sg. vetere, Nom./Akk. Pl. n vetera, Gen. Pl. veterum"},
+{lek:31,pos:"noun",lemma:"aedificium, aedificiī n",nom:"aedificium",gen:"aedificiī",gender:"n",de:["das Gebäude","das Bauwerk"]},
+{lek:31,pos:"noun",lemma:"vīcus, vīcī m",nom:"vīcus",gen:"vīcī",gender:"m",de:["die Gasse","das (Stadt-)Viertel","das Dorf"]},
+{lek:31,pos:"noun",lemma:"versus, versūs m",nom:"versus",gen:"versūs",gender:"m",de:["der Vers"]},
+{lek:31,pos:"verb",lemma:"recitāre",inf:"recitāre",de:["vortragen","vorlesen"]},
+{lek:31,pos:"adj",lemma:"vīvus, vīva, vīvum",de:["lebendig","zu Lebzeiten"]},
+{lek:31,pos:"noun",lemma:"ignis, ignis m",nom:"ignis",gen:"ignis",gender:"m",de:["das Feuer","der Brand"],note:"Gen. Pl. ignium"},
+{lek:31,pos:"word",lemma:"septem",de:["sieben"],note:"Zahlwort"},
+{lek:31,pos:"word",lemma:"ferē",de:["beinahe","fast","ungefähr"],note:"Adverb"},
+{lek:31,pos:"word",lemma:"nē",de:["dass"],note:"Subjunktion; m. Konj.; nach Ausdrücken des Fürchtens"},
+{lek:31,pos:"noun",lemma:"turris, turris f",nom:"turris",gen:"turris",gender:"f",de:["der Turm"],note:"Akk. Sg. turrim, Abl. Sg. turrī, Gen. Pl. turrium"},
+{lek:31,pos:"verb",lemma:"occidere, occidō, occidī, –",inf:"occidere",forms:["occidō","occidī","–"],de:["untergehen","umkommen"]},
+{lek:31,pos:"verb",lemma:"canere, canō, cecinī, cantātum",inf:"canere",forms:["canō","cecinī","cantātum"],de:["(be)singen"]},
+{lek:31,pos:"noun",lemma:"clādēs, clādis f",nom:"clādēs",gen:"clādis",gender:"f",de:["die Niederlage","der Verlust"],note:"Gen. Pl. clādium"},
+{lek:31,pos:"verb",lemma:"premere, premō, pressī, pressum",inf:"premere",forms:["premō","pressī","pressum"],de:["(unter)drücken","bedrängen"]},
+{lek:31,pos:"adj",lemma:"necessārius, necessāria, necessārium",de:["notwendig"]},
+{lek:31,pos:"noun",lemma:"sēditiō, sēditiōnis f",nom:"sēditiō",gen:"sēditiōnis",gender:"f",de:["der Aufruhr","der Aufstand"]},
+{lek:31,pos:"verb",lemma:"suādēre, suādeō, suāsī, suāsum",inf:"suādēre",forms:["suādeō","suāsī","suāsum"],de:["raten","zureden"]},
+{lek:31,pos:"noun",lemma:"hortus, hortī m",nom:"hortus",gen:"hortī",gender:"m",de:["der Garten"]},
+{lek:31,pos:"noun",lemma:"frūmentum, frūmentī n",nom:"frūmentum",gen:"frūmentī",gender:"n",de:["das Getreide"]},
+{lek:31,pos:"verb",lemma:"minuere, minuō, minuī, minūtum",inf:"minuere",forms:["minuō","minuī","minūtum"],de:["vermindern","verringern"]},
+{lek:31,pos:"word",lemma:"simul",de:["gleichzeitig","zugleich"],note:"Adverb"},
+{lek:31,pos:"adj",lemma:"aureus, aurea, aureum",de:["golden","aus Gold"]},
+{lek:31,pos:"noun",lemma:"fāma, fāmae f",nom:"fāma",gen:"fāmae",gender:"f",de:["das Gerücht","der Ruf"]},
+{lek:31,pos:"noun",lemma:"auctor, auctōris m",nom:"auctor",gen:"auctōris",gender:"m",de:["der (Be-)Gründer","der Anstifter","der Veranlasser","der Verfasser"]},
+{lek:31,pos:"noun",lemma:"crīmen, crīminis n",nom:"crīmen",gen:"crīminis",gender:"n",de:["der Vorwurf","das Verbrechen"]},
+{lek:31,pos:"verb",lemma:"damnāre",inf:"damnāre",de:["verurteilen"]},
+{lek:31,pos:"noun",lemma:"poena, poenae f",nom:"poena",gen:"poenae",gender:"f",de:["die Strafe"]},
+
+/* ---------- LEKTION 32 ---------- */
+{lek:32,pos:"verb",lemma:"(sē) continēre",inf:"continēre",de:["(sich) halten","festhalten","enthalten","(sich) aufhalten"]},
+{lek:32,pos:"word",lemma:"extrā",de:["außerhalb","über ... hinaus"],note:"Präposition m. Akk."},
+{lek:32,pos:"adj",lemma:"fīdus, fīda, fīdum",de:["treu","treu ergeben"]},
+{lek:32,pos:"verb",lemma:"gerere, gerō, gessī, gestum",inf:"gerere",forms:["gerō","gessī","gestum"],de:["(aus)führen","tragen"]},
+{lek:32,pos:"verb",lemma:"vincere, vincō, vīcī, victum",inf:"vincere",forms:["vincō","vīcī","victum"],de:["(be)siegen","übertreffen"]},
+{lek:32,pos:"adj",lemma:"certus, certa, certum",de:["sicher","gewiss","bestimmt","zuverlässig"]},
+{lek:32,pos:"word",lemma:"propius",de:["näher"],note:"Adverb"},
+{lek:32,pos:"word",lemma:"adversus",de:["gegen","gegenüber"],note:"Präposition m. Akk."},
+{lek:32,pos:"verb",lemma:"recreāre",inf:"recreāre",de:["wiederherstellen"]},
+{lek:32,pos:"noun",lemma:"crux, crucis f",nom:"crux",gen:"crucis",gender:"f",de:["das Kreuz"]},
+{lek:32,pos:"adj",lemma:"armātus, armāta, armātum",de:["bewaffnet"]},
+{lek:32,pos:"noun",lemma:"ferrum, ferrī n",nom:"ferrum",gen:"ferrī",gender:"n",de:["das Eisen","die Waffe(n)"]},
+{lek:32,pos:"verb",lemma:"prōcēdere, prōcēdō, prōcessī, prōcessum",inf:"prōcēdere",forms:["prōcēdō","prōcessī","prōcessum"],de:["vorrücken","vorankommen"]},
+{lek:32,pos:"adj",lemma:"suprēmus, suprēma, suprēmum",de:["der letzte","der höchste","der oberste"]},
+{lek:32,pos:"adj",lemma:"pār, paris",de:["gleich"],note:"Gen. paris"},
+{lek:32,pos:"noun",lemma:"frōns, frontis f",nom:"frōns",gen:"frontis",gender:"f",de:["die Stirn","die Vorderseite","die Front"],note:"Gen. Pl. frontium"},
+{lek:32,pos:"word",lemma:"velut",de:["wie","wie zum Beispiel"]},
+{lek:32,pos:"noun",lemma:"rēs pūblica, reī pūblicae f",nom:"rēs pūblica",gen:"reī pūblicae",gender:"f",de:["der Staat"]},
+{lek:32,pos:"noun",lemma:"liber, librī m",nom:"liber",gen:"librī",gender:"m",de:["das Buch"]},
+{lek:32,pos:"verb",lemma:"īnspicere, īnspiciō, īnspexī, īnspectum",inf:"īnspicere",forms:["īnspiciō","īnspexī","īnspectum"],de:["hineinschauen"],note:"m. Akk.; hineinschauen (in etw.)"},
+{lek:32,pos:"verb",lemma:"reperīre, reperiō, répperī, repertum",inf:"reperīre",forms:["reperiō","répperī","repertum"],de:["finden","wiederfinden"]},
+{lek:32,pos:"noun",lemma:"victōria, victōriae f",nom:"victōria",gen:"victōriae",gender:"f",de:["der Sieg"]},
+{lek:32,pos:"verb",lemma:"indūcere, indūcō, indūxī, inductum",inf:"indūcere",forms:["indūcō","indūxī","inductum"],de:["(hin)einführen","verleiten"]},
+{lek:32,pos:"verb",lemma:"fugāre",inf:"fugāre",de:["in die Flucht schlagen"]},
+{lek:32,pos:"noun",lemma:"multitūdō, multitūdinis f",nom:"multitūdō",gen:"multitūdinis",gender:"f",de:["die große Anzahl","die Menge"]},
+{lek:32,pos:"noun",lemma:"flūmen, flūminis n",nom:"flūmen",gen:"flūminis",gender:"n",de:["der Fluss"]},
+{lek:32,pos:"verb",lemma:"cōnficere, cōnficiō, cōnfēcī, cōnfectum",inf:"cōnficere",forms:["cōnficiō","cōnfēcī","cōnfectum"],de:["beenden","erledigen"]},
+{lek:32,pos:"noun",lemma:"potestās, potestātis f",nom:"potestās",gen:"potestātis",gender:"f",de:["die Möglichkeit","die (Amts-)Gewalt","die Macht"]},
+{lek:32,pos:"noun",lemma:"religiō, religiōnis f",nom:"religiō",gen:"religiōnis",gender:"f",de:["die (Gottes-)Verehrung","der Glaube","der Aberglaube"]},
+{lek:32,pos:"word",lemma:"quisque",de:["(ein) jeder"],note:"Pronomen"},
+
+/* ---------- LEKTION 33 ---------- */
+{lek:33,pos:"adj",lemma:"sānctus, sāncta, sānctum",de:["ehrwürdig","heilig"]},
+{lek:33,pos:"word",lemma:"imprīmīs",de:["besonders","insbesondere"],note:"Adverb"},
+{lek:33,pos:"verb",lemma:"ōrnāre",inf:"ōrnāre",de:["schmücken","ausstatten"]},
+{lek:33,pos:"verb",lemma:"subīre, subeō, subiī, subitum",inf:"subīre",forms:["subeō","subiī","subitum"],de:["auf sich nehmen","herangehen"]},
+{lek:33,pos:"word",lemma:"umquam",de:["jemals"],note:"Adverb"},
+{lek:33,pos:"noun",lemma:"memoria, memoriae f",nom:"memoria",gen:"memoriae",gender:"f",de:["die Erinnerung","das Gedächtnis","die Zeit"]},
+{lek:33,pos:"verb",lemma:"intellegere, intellegō, intellēxī, intellēctum",inf:"intellegere",forms:["intellegō","intellēxī","intellēctum"],de:["verstehen","erkennen","einsehen"]},
+{lek:33,pos:"noun",lemma:"lūdus, lūdī m",nom:"lūdus",gen:"lūdī",gender:"m",de:["das Spiel","die Schule"]},
+{lek:33,pos:"verb",lemma:"discere, discō, didicī, –",inf:"discere",forms:["discō","didicī","–"],de:["lernen","in Erfahrung bringen"]},
+{lek:33,pos:"noun",lemma:"beneficium, beneficiī n",nom:"beneficium",gen:"beneficiī",gender:"n",de:["die Wohltat"]},
+{lek:33,pos:"verb",lemma:"tribuere, tribuō, tribuī, tribūtum",inf:"tribuere",forms:["tribuō","tribuī","tribūtum"],de:["zuteilen","schenken","erweisen"]},
+{lek:33,pos:"verb",lemma:"efficere, efficiō, effēcī, effectum",inf:"efficere",forms:["efficiō","effēcī","effectum"],de:["bewirken","erreichen"]},
+{lek:33,pos:"adj",lemma:"optimus, optima, optimum",de:["der beste","sehr gut"]},
+{lek:33,pos:"word",lemma:"praetereā",de:["außerdem"],note:"Adverb"},
+{lek:33,pos:"word",lemma:"undique",de:["von überall her"],note:"Adverb"},
+{lek:33,pos:"adj",lemma:"plūrimī, plūrimae, plūrima",de:["die meisten","sehr viele","am meisten"]},
+{lek:33,pos:"noun",lemma:"iuventūs, iuventūtis f",nom:"iuventūs",gen:"iuventūtis",gender:"f",de:["die Jugend"]},
+{lek:33,pos:"word",lemma:"ūnusquisque",de:["jeder Einzelne"],note:"Pronomen"},
+{lek:33,pos:"adj",lemma:"celer, celeris, celere",de:["schnell"]},
+{lek:33,pos:"word",lemma:"quam",de:["(nach Komparativ) als","(vor Superlativ) möglichst"]},
+{lek:33,pos:"adj",lemma:"melior, melior, melius",de:["besser"],note:"Komparativ"},
+{lek:33,pos:"adj",lemma:"māior, māior, māius",de:["größer"],note:"Komparativ"},
+{lek:33,pos:"noun",lemma:"ūsus, ūsūs m",nom:"ūsus",gen:"ūsūs",gender:"m",de:["der Gebrauch","der Nutzen","die Erfahrung"]},
+{lek:33,pos:"adj",lemma:"praeclārus, praeclāra, praeclārum",de:["herrlich","ausgezeichnet","sehr bekannt"]},
+{lek:33,pos:"noun",lemma:"carmen, carminis n",nom:"carmen",gen:"carminis",gender:"n",de:["das Gedicht","das Lied"]},
+{lek:33,pos:"verb",lemma:"celebrāre",inf:"celebrāre",de:["rühmen","verherrlichen","feiern"]},
+{lek:33,pos:"adj",lemma:"māximus, māxima, māximum",de:["der größte","sehr groß"],note:"Superlativ"},
+{lek:33,pos:"noun",lemma:"pecūnia, pecūniae f",nom:"pecūnia",gen:"pecūniae",gender:"f",de:["das Geld","das Vermögen"]},
+{lek:33,pos:"verb",lemma:"dōnāre",inf:"dōnāre",de:["(be)schenken"]},
+{lek:33,pos:"noun",lemma:"lēx, lēgis f",nom:"lēx",gen:"lēgis",gender:"f",de:["das Gesetz","die Bedingung"]},
+{lek:33,pos:"word",lemma:"dum",de:["solange","(solange) bis"],note:"Subjunktion; m. Ind."}
+];
+
+/* ============ STATE ============ */
+let stats={correct:0,wrong:0,streak:0,best:0};
+let dir="latDe";
+let activeLeks=new Set([31,32,33]);
+let currentMode=null;
+let pool=[], idx=0;
+
+const $=id=>document.getElementById(id);
+const stage=$("stage");
+const GNAME={m:"maskulin (m)",f:"feminin (f)",n:"neutrum (n)"};
+const GENDER_LABELS={flash:"Karteikarten",quiz:"Quiz",type:"Tippen",match:"Paare",
+  gender:"Geschlecht",genitive:"Genitiv",stamm:"Stammformen"};
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return (s||"").toLowerCase()
+  .replace(/[āăêēĕîīĭôōŏûūŭ]/g,c=>({'ā':'a','ă':'a','ê':'e','ē':'e','ĕ':'e','î':'i','ī':'i','ĭ':'i','ô':'o','ō':'o','ŏ':'o','û':'u','ū':'u','ŭ':'u'}[c]||c))
+  .replace(/[()]/g,'').replace(/[.,;!?]/g,'').replace(/\s+/g,' ')
+  .replace(/^(der|die|das|ein|eine|sich|be|hin|unter|aus|in etw)\b/,'').trim();}
+
+/* pools by lesson */
+function inLek(v){return activeLeks.has(v.lek);}
+function words(){return VOCAB.filter(inLek);}
+function nouns(){return words().filter(v=>v.pos==="noun");}
+function verbsWithForms(){return words().filter(v=>v.pos==="verb"&&v.forms);}
+
+function headword(v){return v.pos==="noun"?v.nom:(v.pos==="verb"?v.inf:v.lemma);}
+function promptText(v){return dir==="latDe"?v.lemma:v.de.join(", ");}
+function subline(v){return dir==="latDe"?(v.note||""):"→ Latein";}
+function answersFor(v){return dir==="latDe"?v.de:[headword(v),v.lemma.split(",")[0].trim()];}
+function answerText(v){return dir==="latDe"?v.de.join(" / "):headword(v);}
+
+/* ============ STATS ============ */
+function updateStats(){
+  $("stCorrect").textContent=stats.correct;
+  $("stWrong").textContent=stats.wrong;
+  $("stStreak").textContent=stats.streak;
+  if(stats.streak>stats.best)stats.best=stats.streak;
+  $("stBest").textContent=stats.best;
+}
+function score(ok){if(ok){stats.correct++;stats.streak++;}else{stats.wrong++;stats.streak=0;}updateStats();}
+function resetStats(){stats={correct:0,wrong:0,streak:0,best:0};updateStats();}
+
+function toggleDir(){dir=dir==="latDe"?"deLat":"latDe";renderDirLabel();}
+function renderDirLabel(){$("dirLabel").textContent=dir==="latDe"?"Latein → Deutsch":"Deutsch → Latein";}
+
+function toggleLek(n,el){
+  if(activeLeks.has(n)){
+    if(activeLeks.size===1)return; // mind. eine Lektion aktiv
+    activeLeks.delete(n);el.classList.remove("on");
+  }else{activeLeks.add(n);el.classList.add("on");}
+  refreshCounts();
+}
+function refreshCounts(){
+  $("cntGender").textContent=nouns().length+" Nomen";
+  $("cntGenitive").textContent=nouns().length+" Nomen";
+  $("cntStamm").textContent=verbsWithForms().length+" Verben";
+}
+
+function goMenu(){currentMode=null;$("game").classList.add("hidden");$("menu").classList.remove("hidden");}
+function setBar(){$("bar").style.width=(pool.length?idx/pool.length*100:0)+"%";}
+
+/* ============ START ============ */
+function startMode(mode){
+  currentMode=mode;
+  if(mode==="gender"||mode==="genitive")pool=shuffle(nouns());
+  else if(mode==="stamm")pool=shuffle(verbsWithForms());
+  else pool=shuffle(words());
+  idx=0;
+  $("menu").classList.add("hidden");
+  $("game").classList.remove("hidden");
+  const leks=[...activeLeks].sort().join("·");
+  let extra=(mode==="flash"||mode==="quiz"||mode==="type"||mode==="match")?
+    " · "+(dir==="latDe"?"LAT→DE":"DE→LAT"):"";
+  $("gameDir").innerHTML="Modus: <b>"+GENDER_LABELS[mode]+"</b> · Lek. "+leks+extra;
+  if(!pool.length){stage.innerHTML='<div class="warn">Für die gewählten Lektionen gibt es hier keine passenden Wörter.</div>';$("bar").style.width="0%";return;}
+  if(mode==="match")renderMatch();else render();
+}
+
+function render(){
+  if(idx>=pool.length){renderDone();return;}
+  setBar();
+  const v=pool[idx];
+  ({flash:renderFlash,quiz:renderQuiz,type:renderType,
+    gender:renderGender,genitive:renderGenitive,stamm:renderStamm}[currentMode])(v);
+}
+function next(){idx++;render();}
+function prev(){if(idx>0){idx--;render();}}
+
+/* ---------- FLASHCARDS ---------- */
+function renderFlash(v){
+  const front=dir==="latDe"?v.lemma:v.de.join(", ");
+  const back=dir==="latDe"?v.de.join("<br>"):v.lemma;
+  const sub=dir==="latDe"?(v.note||"&nbsp;"):"Was heißt das auf Latein?";
+  stage.innerHTML=`
+    <div class="card3d"><div class="flip" id="flip" onclick="this.classList.toggle('flipped')">
+      <div class="face front"><div class="word">${front}</div><div class="forms">${sub}</div>
+        <div class="hint">👆 Zum Umdrehen tippen</div></div>
+      <div class="face back"><div class="de">${back}</div></div>
+    </div></div>
+    <div class="center" style="margin-top:12px;">
+      <button class="btn ghost" onclick="prev()">‹ Zurück</button>
+      <button class="btn" onclick="next()">Nächste ›</button>
+    </div>
+    <div class="hint" style="text-align:center;margin-top:8px;">Karte ${idx+1} / ${pool.length}</div>`;
+}
+
+/* ---------- QUIZ (Übersetzung) ---------- */
+function renderQuiz(v){
+  const correct=answerText(v);
+  const distractors=shuffle(words().filter(x=>x!==v)).slice(0,3).map(answerText);
+  const opts=shuffle([correct,...distractors]);
+  stage.innerHTML=`<div class="q-word">${promptText(v)}</div>
+    <div class="q-forms">${subline(v)||"&nbsp;"}</div><div class="options" id="opts"></div>`;
+  const box=$("opts");
+  opts.forEach(o=>{
+    const b=document.createElement("button");b.className="opt";b.textContent=o;
+    b.onclick=()=>{
+      const ok=o===correct;
+      [...box.children].forEach(c=>{c.disabled=true;
+        if(c.textContent===correct)c.classList.add("correct");else if(c===b)c.classList.add("wrong");});
+      score(ok);setTimeout(next,ok?650:1350);
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- TIPPEN (Übersetzung) ---------- */
+function renderType(v){
+  stage.innerHTML=`<div class="q-word">${promptText(v)}</div>
+    <div class="q-forms">${subline(v)||"&nbsp;"}</div>
+    <input class="type-input" id="tin" placeholder="Übersetzung eingeben…" autocomplete="off">
+    <div class="feedback" id="fb"></div>
+    <div class="center" style="margin-top:12px;">
+      <button class="btn" id="chk" onclick="checkType()">Prüfen</button>
+      <button class="btn ghost" onclick="revealType()">Weiß ich nicht</button></div>`;
+  const inp=$("tin");inp.focus();
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkType();});
+  stage._v=v;stage._answered=false;
+}
+function checkType(){
+  if(stage._answered){next();return;}
+  const v=stage._v,val=$("tin").value.trim();if(!val)return;
+  const ok=answersFor(v).some(a=>norm(a)===norm(val));
+  finishType(v,ok);
+}
+function revealType(){if(stage._answered){next();return;}finishType(stage._v,false,true);}
+function finishType(v,ok,reveal){
+  stage._answered=true;if(!reveal)score(ok);else score(false);
+  const fb=$("fb");
+  if(ok){fb.className="feedback good";fb.innerHTML="✅ Richtig!"+(dir==="deLat"?" ("+v.lemma+")":"");}
+  else{fb.className="feedback bad";fb.innerHTML=(reveal?"👉":"❌")+" Lösung: <span class='sol'>"+answerText(v)+"</span>";}
+  $("tin").disabled=true;$("chk").textContent="Weiter ›";
+}
+
+/* ---------- GESCHLECHT ---------- */
+function renderGender(v){
+  setBar();
+  stage.innerHTML=`<div class="q-word">${v.nom}</div>
+    <div class="q-forms">${v.de.join(", ")}<br>Welches Geschlecht?</div>
+    <div class="options" id="opts">
+      <button class="opt big" data-g="m">der (m)</button>
+      <button class="opt big" data-g="f">die (f)</button>
+      <button class="opt big" data-g="n">das (n)</button>
+    </div><div class="feedback" id="fb"></div>`;
+  const box=$("opts");
+  [...box.children].forEach(b=>{
+    b.onclick=()=>{
+      const ok=b.dataset.g===v.gender;
+      [...box.children].forEach(c=>{c.disabled=true;
+        if(c.dataset.g===v.gender)c.classList.add("correct");else if(c===b)c.classList.add("wrong");});
+      score(ok);
+      const fb=$("fb");fb.className="feedback "+(ok?"good":"bad");
+      fb.innerHTML=(ok?"✅ ":"❌ ")+"<span class='sol'>"+v.lemma+"</span>";
+      setTimeout(next,ok?700:1400);
+    };
+  });
+}
+
+/* ---------- GENITIV ---------- */
+function renderGenitive(v){
+  setBar();
+  stage.innerHTML=`<div class="q-word">${v.nom} <span class="badge ${v.gender}">${v.gender}</span></div>
+    <div class="q-forms">${v.de.join(", ")}<br>Wie lautet der Genitiv (Singular)?</div>
+    <input class="type-input" id="tin" placeholder="Genitivform eingeben…" autocomplete="off">
+    <div class="feedback" id="fb"></div>
+    <div class="center" style="margin-top:12px;">
+      <button class="btn" id="chk" onclick="checkGen()">Prüfen</button>
+      <button class="btn ghost" onclick="revealGen()">Weiß ich nicht</button></div>`;
+  const inp=$("tin");inp.focus();
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkGen();});
+  stage._v=v;stage._answered=false;
+}
+function checkGen(){
+  if(stage._answered){next();return;}
+  const v=stage._v,val=$("tin").value.trim();if(!val)return;
+  const ok=norm(v.gen)===norm(val);finishGen(v,ok);
+}
+function revealGen(){if(stage._answered){next();return;}finishGen(stage._v,false,true);}
+function finishGen(v,ok,reveal){
+  stage._answered=true;score(ok&&!reveal?true:false);
+  const fb=$("fb");
+  if(ok){fb.className="feedback good";fb.innerHTML="✅ Richtig!";}
+  else{fb.className="feedback bad";fb.innerHTML=(reveal?"👉":"❌")+" Genitiv: <span class='sol'>"+v.gen+"</span>";}
+  $("tin").disabled=true;$("chk").textContent="Weiter ›";
+}
+
+/* ---------- STAMMFORMEN (Zeitformen) ---------- */
+const SF_LABELS=["Präsens (1. P. Sg.)","Perfekt (1. P. Sg.)","PPP / Supinum"];
+function renderStamm(v){
+  setBar();
+  let rows="";
+  for(let i=0;i<3;i++)rows+=`<div class="stammform-row"><label>${SF_LABELS[i]}</label>
+    <input class="type-input" id="sf${i}" autocomplete="off" placeholder="…"></div>`;
+  stage.innerHTML=`<div class="q-word">${v.inf}</div>
+    <div class="q-forms">${v.de.join(", ")}<br>Nenne die Stammformen:</div>
+    ${rows}<div class="feedback" id="fb"></div>
+    <div class="center" style="margin-top:8px;">
+      <button class="btn" id="chk" onclick="checkStamm()">Prüfen</button>
+      <button class="btn ghost" onclick="revealStamm()">Weiß ich nicht</button></div>`;
+  $("sf0").focus();
+  ["sf0","sf1","sf2"].forEach((id,i)=>{
+    $(id).addEventListener("keydown",e=>{if(e.key==="Enter"){if(i<2)$("sf"+(i+1)).focus();else checkStamm();}});
+  });
+  stage._v=v;stage._answered=false;
+}
+function stammOk(input,sol){
+  const s=norm(sol);
+  if(s==="–"||s==="-"||s==="")return norm(input)===""||norm(input)==="-";
+  return norm(input)===s;
+}
+function checkStamm(){
+  if(stage._answered){next();return;}
+  const v=stage._v;
+  const ins=[$("sf0").value,$("sf1").value,$("sf2").value];
+  const results=v.forms.map((f,i)=>stammOk(ins[i],f));
+  const allOk=results.every(Boolean);
+  stage._answered=true;score(allOk);
+  ["sf0","sf1","sf2"].forEach((id,i)=>{
+    const el=$(id);el.disabled=true;
+    el.style.borderColor=results[i]?"var(--good)":"var(--bad)";
+  });
+  const fb=$("fb");
+  if(allOk){fb.className="feedback good";fb.innerHTML="✅ Alles richtig!";}
+  else{fb.className="feedback bad";
+    fb.innerHTML="Lösung: <span class='sol'>"+v.inf+", "+v.forms.join(", ")+"</span>";}
+  $("chk").textContent="Weiter ›";
+}
+function revealStamm(){
+  if(stage._answered){next();return;}
+  const v=stage._v;stage._answered=true;score(false);
+  ["sf0","sf1","sf2"].forEach((id,i)=>{const el=$(id);el.value=v.forms[i];el.disabled=true;el.style.borderColor="var(--accent)";});
+  const fb=$("fb");fb.className="feedback bad";
+  fb.innerHTML="👉 <span class='sol'>"+v.inf+", "+v.forms.join(", ")+"</span>";
+  $("chk").textContent="Weiter ›";
+}
+
+/* ---------- MATCH ---------- */
+let matchSel=null,matchDone=0,matchTimer=null,matchTime=0;
+function renderMatch(){
+  const src=words();
+  const n=Math.min(6,src.length);
+  const batch=shuffle(src).slice(0,n);
+  const lefts=shuffle(batch),rights=shuffle(batch);
+  matchDone=0;matchSel=null;matchTime=0;
+  stage.innerHTML=`<div class="q-forms">⏱️ <span id="clock">0.0</span>s · Verbinde die ${n} Paare</div>
+    <div class="match-grid"><div class="match-col" id="colL"></div><div class="match-col" id="colR"></div></div>`;
+  const colL=$("colL"),colR=$("colR");
+  lefts.forEach(v=>{const d=document.createElement("div");d.className="mtile";d.dataset.k=v.lemma;
+    d.textContent=headword(v);d.onclick=()=>pick(d,"L");colL.appendChild(d);});
+  rights.forEach(v=>{const d=document.createElement("div");d.className="mtile";d.dataset.k=v.lemma;
+    d.textContent=v.de.join(", ");d.onclick=()=>pick(d,"R");colR.appendChild(d);});
+  $("bar").style.width="0%";
+  clearInterval(matchTimer);
+  matchTimer=setInterval(()=>{matchTime+=0.1;$("clock").textContent=matchTime.toFixed(1);},100);
+}
+function pick(el,side){
+  if(el.classList.contains("done"))return;
+  if(!matchSel){matchSel={el,side,k:el.dataset.k};el.classList.add("sel");return;}
+  if(matchSel.el===el){el.classList.remove("sel");matchSel=null;return;}
+  if(matchSel.side===side){matchSel.el.classList.remove("sel");matchSel={el,side,k:el.dataset.k};el.classList.add("sel");return;}
+  if(matchSel.k===el.dataset.k){
+    el.classList.add("done");matchSel.el.classList.remove("sel");matchSel.el.classList.add("done");
+    matchSel=null;matchDone++;score(true);
+    const total=stage.querySelectorAll(".mtile").length/2;
+    $("bar").style.width=(matchDone/total*100)+"%";
+    if(matchDone===total){clearInterval(matchTimer);setTimeout(matchWin,400);}
+  }else{
+    const a=el,b=matchSel.el;a.classList.add("miss");b.classList.add("miss");score(false);matchSel=null;
+    setTimeout(()=>{a.classList.remove("miss");b.classList.remove("sel","miss");},350);
+  }
+}
+function matchWin(){
+  stage.innerHTML=`<div class="center"><div class="big-emoji">🎉</div>
+    <div class="done-msg">Alle Paare gefunden!</div>
+    <p style="color:var(--muted)">Zeit: <b style="color:var(--accent)">${matchTime.toFixed(1)}s</b></p>
+    <div style="margin-top:16px;"><button class="btn" onclick="renderMatch()">Nochmal ⏱️</button>
+    <button class="btn ghost" onclick="goMenu()">Menü</button></div></div>`;
+}
+
+/* ---------- DONE ---------- */
+function renderDone(){
+  $("bar").style.width="100%";
+  stage.innerHTML=`<div class="center"><div class="big-emoji">🏆</div>
+    <div class="done-msg">Durchgang geschafft!</div>
+    <p style="color:var(--muted)">Alle ${pool.length} durch.<br>Beste Serie: <b style="color:var(--good)">${stats.best}</b></p>
+    <div style="margin-top:16px;"><button class="btn" onclick="startMode(currentMode)">Nochmal 🔁</button>
+    <button class="btn ghost" onclick="goMenu()">Menü</button></div></div>`;
+}
+
+renderDirLabel();updateStats();refreshCounts();
+</script>
+</body>
+</html>
