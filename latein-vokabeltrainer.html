@@ -123,7 +123,7 @@
 <div class="wrap">
   <header>
     <h1>🏛️ <span class="lat">Latein</span> · Vokabeltrainer</h1>
-    <div class="sub">Lektionen 31 · 32 · 33 – mit Geschlecht, Genitiv & Stammformen</div>
+    <div class="sub">Lektionen 31 – 35 – mit Geschlecht, Genitiv & Stammformen</div>
   </header>
 
   <div class="stats">
@@ -140,6 +140,8 @@
       <span class="chip on" data-lek="31" onclick="toggleLek(31,this)">Lektion 31</span>
       <span class="chip on" data-lek="32" onclick="toggleLek(32,this)">Lektion 32</span>
       <span class="chip on" data-lek="33" onclick="toggleLek(33,this)">Lektion 33</span>
+      <span class="chip on" data-lek="34" onclick="toggleLek(34,this)">Lektion 34</span>
+      <span class="chip on" data-lek="35" onclick="toggleLek(35,this)">Lektion 35</span>
     </div>
 
     <div class="section-label">📖 Übersetzen</div>
@@ -198,7 +200,7 @@
     <div id="stage"></div>
   </div>
 
-  <footer>Erstellt aus deinem Vokabelheft · Lektionen 31–33 · Viel Erfolg! 💪</footer>
+  <footer>Erstellt aus deinem Vokabelheft · Lektionen 31–35 · Viel Erfolg! 💪</footer>
 </div>
 
 <script>
@@ -305,13 +307,78 @@ const VOCAB = [
 {lek:33,pos:"noun",lemma:"pecūnia, pecūniae f",nom:"pecūnia",gen:"pecūniae",gender:"f",de:["das Geld","das Vermögen"]},
 {lek:33,pos:"verb",lemma:"dōnāre",inf:"dōnāre",de:["(be)schenken"]},
 {lek:33,pos:"noun",lemma:"lēx, lēgis f",nom:"lēx",gen:"lēgis",gender:"f",de:["das Gesetz","die Bedingung"]},
-{lek:33,pos:"word",lemma:"dum",de:["solange","(solange) bis"],note:"Subjunktion; m. Ind."}
+{lek:33,pos:"word",lemma:"dum",de:["solange","(solange) bis"],note:"Subjunktion; m. Ind."},
+
+/* ---------- LEKTION 34 ---------- */
+{lek:34,pos:"word",lemma:"quīn?",de:["warum nicht?"]},
+{lek:34,pos:"verb",lemma:"contemplārī, contemplor, contemplātus sum",inf:"contemplārī",forms:["contemplor","contemplātus sum"],dep:true,de:["(aus der Nähe genau) betrachten"]},
+{lek:34,pos:"noun",lemma:"occāsiō, occāsiōnis f",nom:"occāsiō",gen:"occāsiōnis",gender:"f",de:["die Gelegenheit"]},
+{lek:34,pos:"verb",lemma:"offerre, offerō, obtulī, oblātum",inf:"offerre",forms:["offerō","obtulī","oblātum"],de:["entgegenbringen","anbieten"]},
+{lek:34,pos:"verb",lemma:"verērī, vereor, veritus sum",inf:"verērī",forms:["vereor","veritus sum"],dep:true,de:["fürchten","sich scheuen","verehren"]},
+{lek:34,pos:"noun",lemma:"glōria, glōriae f",nom:"glōria",gen:"glōriae",gender:"f",de:["der Ruhm","die Ehre"]},
+{lek:34,pos:"verb",lemma:"parere, pariō, peperī, partum",inf:"parere",forms:["pariō","peperī","partum"],de:["erwerben","gewinnen","hervorbringen"]},
+{lek:34,pos:"word",lemma:"propter",de:["wegen"],note:"Präposition m. Akk."},
+{lek:34,pos:"noun",lemma:"malum, malī n",nom:"malum",gen:"malī",gender:"n",de:["das Übel","das Leid","das Unglück"]},
+{lek:34,pos:"verb",lemma:"patī, patior, passus sum",inf:"patī",forms:["patior","passus sum"],dep:true,de:["(er)leiden","ertragen","zulassen","geschehen lassen"]},
+{lek:34,pos:"verb",lemma:"āmittere, āmittō, āmīsī, āmissum",inf:"āmittere",forms:["āmittō","āmīsī","āmissum"],de:["verlieren"]},
+{lek:34,pos:"verb",lemma:"hortārī, hortor, hortātus sum",inf:"hortārī",forms:["hortor","hortātus sum"],dep:true,de:["auffordern","ermuntern","ermahnen"]},
+{lek:34,pos:"noun",lemma:"cāsus, cāsūs m",nom:"cāsus",gen:"cāsūs",gender:"m",de:["der Fall","der Zufall","der Schicksalsschlag"]},
+{lek:34,pos:"verb",lemma:"experīrī, experior, expertus sum",inf:"experīrī",forms:["experior","expertus sum"],dep:true,de:["erfahren","erleiden","versuchen"]},
+{lek:34,pos:"noun",lemma:"saeculum, saeculī n",nom:"saeculum",gen:"saeculī",gender:"n",de:["das Jahrhundert","die Welt"]},
+{lek:34,pos:"noun",lemma:"maiōrēs, maiōrum m",nom:"maiōrēs",gen:"maiōrum",gender:"m",de:["die Vorfahren"],note:"Pluralwort"},
+{lek:34,pos:"noun",lemma:"opera, operae f",nom:"opera",gen:"operae",gender:"f",de:["die Arbeit","die Tätigkeit","die Mühe"]},
+{lek:34,pos:"adj",lemma:"varius, varia, varium",de:["verschieden(artig)"]},
+{lek:34,pos:"word",lemma:"frūstrā",de:["vergeblich"],note:"Adverb"},
+{lek:34,pos:"verb",lemma:"cōnārī, cōnor, cōnātus sum",inf:"cōnārī",forms:["cōnor","cōnātus sum"],dep:true,de:["versuchen"]},
+{lek:34,pos:"noun",lemma:"impetus, impetūs m",nom:"impetus",gen:"impetūs",gender:"m",de:["der Angriff","der Schwung"]},
+{lek:34,pos:"word",lemma:"quoque",de:["auch"],note:"nachgestellt"},
+{lek:34,pos:"adj",lemma:"tertius, tertia, tertium",de:["der dritte"]},
+{lek:34,pos:"word",lemma:"dēnique",de:["schließlich","zuletzt"],note:"Adverb"},
+{lek:34,pos:"verb",lemma:"potīrī, potior, potītus sum",inf:"potīrī",forms:["potior","potītus sum"],dep:true,de:["(etw.) in seine Gewalt bringen"],note:"m. Abl."},
+{lek:34,pos:"verb",lemma:"admīrārī, admīror, admīrātus sum",inf:"admīrārī",forms:["admīror","admīrātus sum"],dep:true,de:["bewundern"]},
+{lek:34,pos:"verb",lemma:"indicāre",inf:"indicāre",de:["anzeigen","angeben"]},
+{lek:34,pos:"verb",lemma:"fīgere, fīgō, fīxī, fīxum",inf:"fīgere",forms:["fīgō","fīxī","fīxum"],de:["(an)heften","befestigen","auf etw. richten"]},
+{lek:34,pos:"verb",lemma:"prōtegere, prōtegō, prōtēxī, prōtēctum",inf:"prōtegere",forms:["prōtegō","prōtēxī","prōtēctum"],de:["schützen"]},
+{lek:34,pos:"verb",lemma:"loquī, loquor, locūtus sum",inf:"loquī",forms:["loquor","locūtus sum"],dep:true,de:["reden","sprechen"]},
+{lek:34,pos:"noun",lemma:"sanguis, sanguinis m",nom:"sanguis",gen:"sanguinis",gender:"m",de:["das Blut"]},
+
+/* ---------- LEKTION 35 ---------- */
+{lek:35,pos:"verb",lemma:"contingere, contingō, contigī, contāctum",inf:"contingere",forms:["contingō","contigī","contāctum"],de:["berühren","gelingen"]},
+{lek:35,pos:"adj",lemma:"innocēns, innocentis",de:["unschuldig"],note:"Gen. innocentis"},
+{lek:35,pos:"verb",lemma:"ūtī, ūtor, ūsus sum",inf:"ūtī",forms:["ūtor","ūsus sum"],dep:true,de:["(etw.) benutzen","gebrauchen"],note:"m. Abl."},
+{lek:35,pos:"adj",lemma:"supplex, supplicis",de:["bittend","flehend"],note:"Gen. supplicis"},
+{lek:35,pos:"noun",lemma:"magister, magistrī m",nom:"magister",gen:"magistrī",gender:"m",de:["der Lehrer"]},
+{lek:35,pos:"word",lemma:"vidētur / videntur",de:["er, sie, es scheint / sie scheinen (etw. zu tun)"],note:"m. Inf."},
+{lek:35,pos:"noun",lemma:"ōrātiō, ōrātiōnis f",nom:"ōrātiō",gen:"ōrātiōnis",gender:"f",de:["die Rede"]},
+{lek:35,pos:"verb",lemma:"merēre",inf:"merēre",de:["verdienen"]},
+{lek:35,pos:"verb",lemma:"aestimāre",inf:"aestimāre",de:["(ein)schätzen"]},
+{lek:35,pos:"noun",lemma:"facultās, facultātis f",nom:"facultās",gen:"facultātis",gender:"f",de:["die Möglichkeit","die Gelegenheit"]},
+{lek:35,pos:"word",lemma:"dīcitur / dīcuntur",de:["man sagt, dass er/sie/es ... (etw. tut/tun)","er/sie/es soll / sie sollen (etw. tun)"],note:"m. Inf."},
+{lek:35,pos:"adj",lemma:"amplus, ampla, amplum",de:["groß(artig)","bedeutend","angesehen"]},
+{lek:35,pos:"noun",lemma:"praemium, praemiī n",nom:"praemium",gen:"praemiī",gender:"n",de:["die Belohnung","die Auszeichnung"]},
+{lek:35,pos:"word",lemma:"māximē",de:["am meisten","besonders"],note:"Adverb"},
+{lek:35,pos:"verb",lemma:"existimāre",inf:"existimāre",de:["meinen","schätzen"]},
+{lek:35,pos:"adj",lemma:"beātus, beāta, beātum",de:["glücklich","reich"]},
+{lek:35,pos:"adj",lemma:"iūstus, iūsta, iūstum",de:["gerecht","gebührend","richtig"]},
+{lek:35,pos:"verb",lemma:"proficīscī, proficīscor, profectus sum",inf:"proficīscī",forms:["proficīscor","profectus sum"],dep:true,de:["aufbrechen","(ab)reisen"]},
+{lek:35,pos:"verb",lemma:"īrāscī, īrāscor, –",inf:"īrāscī",forms:["īrāscor","–"],dep:true,de:["zornig sein (auf jmdn.)","in Zorn geraten"],note:"m. Dat."},
+{lek:35,pos:"verb",lemma:"morī, morior, mortuus sum",inf:"morī",forms:["morior","mortuus sum"],dep:true,de:["sterben"]},
+{lek:35,pos:"verb",lemma:"dēdūcere, dēdūcō, dēdūxī, dēductum",inf:"dēdūcere",forms:["dēdūcō","dēdūxī","dēductum"],de:["abführen","wegführen"]},
+{lek:35,pos:"word",lemma:"inde",de:["von dort"],note:"Adverb"},
+{lek:35,pos:"verb",lemma:"observāre",inf:"observāre",de:["beobachten","einhalten","beachten"]},
+{lek:35,pos:"verb",lemma:"sequī, sequor, secūtus sum",inf:"sequī",forms:["sequor","secūtus sum"],dep:true,de:["(jmdm.) folgen"],note:"m. Akk."},
+{lek:35,pos:"word",lemma:"causā",de:["wegen","um ... zu"],note:"m. Gen.; nachgestellt"},
+{lek:35,pos:"adj",lemma:"sapiēns, sapientis",de:["weise","vernünftig"],note:"Gen. sapientis"},
+{lek:35,pos:"noun",lemma:"vultus, vultūs m",nom:"vultus",gen:"vultūs",gender:"m",de:["das Gesicht","die Miene"]},
+{lek:35,pos:"noun",lemma:"pōculum, pōculī n",nom:"pōculum",gen:"pōculī",gender:"n",de:["der Becher"]},
+{lek:35,pos:"word",lemma:"ergō",de:["also"]},
+{lek:35,pos:"adj",lemma:"nocēns, nocentis",de:["schuldig"],note:"Gen. nocentis"}
 ];
 
 /* ============ STATE ============ */
 let stats={correct:0,wrong:0,streak:0,best:0};
 let dir="latDe";
-let activeLeks=new Set([31,32,33]);
+let activeLeks=new Set([31,32,33,34,35]);
 let currentMode=null;
 let pool=[], idx=0;
 
@@ -515,21 +582,26 @@ function finishGen(v,ok,reveal){
 }
 
 /* ---------- STAMMFORMEN (Zeitformen) ---------- */
-const SF_LABELS=["Präsens (1. P. Sg.)","Perfekt (1. P. Sg.)","PPP / Supinum"];
+function stammLabels(v){
+  return v.forms.length===3
+    ? ["Präsens (1. P. Sg.)","Perfekt (1. P. Sg.)","PPP / Supinum"]
+    : ["Präsens (1. P. Sg.)","Perfekt (1. P. Sg.)"];
+}
 function renderStamm(v){
   setBar();
+  const labels=stammLabels(v);
   let rows="";
-  for(let i=0;i<3;i++)rows+=`<div class="stammform-row"><label>${SF_LABELS[i]}</label>
+  for(let i=0;i<v.forms.length;i++)rows+=`<div class="stammform-row"><label>${labels[i]}</label>
     <input class="type-input" id="sf${i}" autocomplete="off" placeholder="…"></div>`;
   stage.innerHTML=`<div class="q-word">${v.inf}</div>
-    <div class="q-forms">${v.de.join(", ")}<br>Nenne die Stammformen:</div>
+    <div class="q-forms">${v.de.join(", ")}${v.dep?" · <i>Deponens</i>":""}<br>Nenne die Stammformen:</div>
     ${rows}<div class="feedback" id="fb"></div>
     <div class="center" style="margin-top:8px;">
       <button class="btn" id="chk" onclick="checkStamm()">Prüfen</button>
       <button class="btn ghost" onclick="revealStamm()">Weiß ich nicht</button></div>`;
   $("sf0").focus();
-  ["sf0","sf1","sf2"].forEach((id,i)=>{
-    $(id).addEventListener("keydown",e=>{if(e.key==="Enter"){if(i<2)$("sf"+(i+1)).focus();else checkStamm();}});
+  v.forms.forEach((f,i)=>{
+    $("sf"+i).addEventListener("keydown",e=>{if(e.key==="Enter"){if(i<v.forms.length-1)$("sf"+(i+1)).focus();else checkStamm();}});
   });
   stage._v=v;stage._answered=false;
 }
@@ -541,14 +613,10 @@ function stammOk(input,sol){
 function checkStamm(){
   if(stage._answered){next();return;}
   const v=stage._v;
-  const ins=[$("sf0").value,$("sf1").value,$("sf2").value];
-  const results=v.forms.map((f,i)=>stammOk(ins[i],f));
+  const results=v.forms.map((f,i)=>stammOk($("sf"+i).value,f));
   const allOk=results.every(Boolean);
   stage._answered=true;score(allOk);
-  ["sf0","sf1","sf2"].forEach((id,i)=>{
-    const el=$(id);el.disabled=true;
-    el.style.borderColor=results[i]?"var(--good)":"var(--bad)";
-  });
+  v.forms.forEach((f,i)=>{const el=$("sf"+i);el.disabled=true;el.style.borderColor=results[i]?"var(--good)":"var(--bad)";});
   const fb=$("fb");
   if(allOk){fb.className="feedback good";fb.innerHTML="✅ Alles richtig!";}
   else{fb.className="feedback bad";
@@ -558,7 +626,7 @@ function checkStamm(){
 function revealStamm(){
   if(stage._answered){next();return;}
   const v=stage._v;stage._answered=true;score(false);
-  ["sf0","sf1","sf2"].forEach((id,i)=>{const el=$(id);el.value=v.forms[i];el.disabled=true;el.style.borderColor="var(--accent)";});
+  v.forms.forEach((f,i)=>{const el=$("sf"+i);el.value=v.forms[i];el.disabled=true;el.style.borderColor="var(--accent)";});
   const fb=$("fb");fb.className="feedback bad";
   fb.innerHTML="👉 <span class='sol'>"+v.inf+", "+v.forms.join(", ")+"</span>";
   $("chk").textContent="Weiter ›";
